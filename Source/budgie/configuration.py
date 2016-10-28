@@ -7,6 +7,10 @@ __builtin_configurations = """
 
 workers: 10
 
+db:
+  uri: sqlite:///%(here)s/../data/devdata.db
+  echo: true
+
 clients:
   localhost:
     address: 127.0.0.1
