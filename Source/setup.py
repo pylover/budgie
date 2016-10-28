@@ -10,7 +10,9 @@ with open(os.path.join(os.path.dirname(__file__), 'budgie', '__init__.py')) as v
 
 dependencies = [
     'sqlalchemy',
-    'pymlconf'
+    'pymlconf',
+    'paramiko',
+
 ]
 
 
