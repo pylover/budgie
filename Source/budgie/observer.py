@@ -7,28 +7,6 @@ from budgie.configuration import settings
 from budgie.worker import HelpDeskWorker
 
 
-def worker(jobs_stack):
-
-    while True:
-        try:
-            name, config = jobs_stack.get(timeout=.1)
-        except QueueEmpty:
-            break
-
-        agent = HelpDeskWorker(
-            config.username,
-            config.hostname,
-            port=config.port,
-            key_file=config.key_file,
-            password=None if not hasattr(config, 'password') else config.password
-        )
-
-        agent.run()
-
-        # Check for alert
-        agent.check_for_alerts(config.alerts, config.mail)
-
-
 class HelpdeskObserver(object):
     jobs = Queue(maxsize=1000)
 
@@ -45,7 +23,7 @@ class HelpdeskObserver(object):
             Thread(
                 name='Worker: %s' % i,
                 daemon=True,
-                target=functools.partial(worker, self.jobs)
+                target=self.worker
             )
             for i in range(settings.workers)
         ]
@@ -57,3 +35,24 @@ class HelpdeskObserver(object):
         # Waiting
         for thread in threads:
             thread.join()
+
+    def worker(self):
+        while True:
+            try:
+                name, config = self.jobs.get(timeout=.1)
+            except QueueEmpty:
+                break
+
+            agent = HelpDeskWorker(
+                config.username,
+                config.hostname,
+                port=config.port,
+                key_file=config.key_file,
+                password=None if not hasattr(config, 'password') else config.password
+            )
+
+            agent.run()
+
+            # Check for alerts
+            agent.check_for_alerts(config.alerts, config.mail)
+

@@ -13,6 +13,8 @@ class SMTPClientTestCase(unittest.TestCase):
         init_config(force=True)
         settings.merge("""
         smtp:
+          startls: false
+          auth: false
           host: localhost
           port: 2525
           local_hostname: localhost
@@ -20,7 +22,7 @@ class SMTPClientTestCase(unittest.TestCase):
         """)
 
     def test_client(self):
-        with mockup_smtp_server() as smtp_server, SMTPClient(auth=False) as smtp_client:
+        with mockup_smtp_server(2525), SMTPClient(auth=False) as smtp_client:
 
             smtp_client.send(
                 "vahid@crossover.com",

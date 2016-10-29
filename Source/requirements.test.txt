@@ -1,1 +1,3 @@
 mock-ssh-server
+nose
+coverage

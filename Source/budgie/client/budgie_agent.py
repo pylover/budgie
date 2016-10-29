@@ -13,8 +13,8 @@ def write_output(data):
     # Dumping
     pickle.dump(data, buffer)
 
-    # Encrypting
-    # TODO: encrypt data using pycrypto, not required, because the connection is made by SSH.
+    # Encryption
+    # NOTE: encrypt data using pycrypto, not required, because this shell is behind the SSH.
 
     # Encode the binary as base64
     buffer.seek(0)

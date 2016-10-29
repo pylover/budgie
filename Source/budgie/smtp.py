@@ -7,7 +7,7 @@ from budgie.configuration import settings
 
 class SMTPClient(object):
 
-    def __init__(self, startls=False, auth=True):
+    def __init__(self, startls=False, auth=False):
         self.smtp_config = settings.smtp
         self.startls = startls or self.smtp_config.startls
         self.auth = auth or self.smtp_config.auth

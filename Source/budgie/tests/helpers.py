@@ -1,6 +1,7 @@
 
 
 from os.path import abspath, dirname, join, exists
+import socket
 import os
 import unittest
 import smtpd
@@ -54,22 +55,20 @@ class MockupSSHTestCase(DatabaseTestCase):
 class FakeSMTPServer(smtpd.SMTPServer):
     """A Fake smtp server"""
 
-    def __init__(self, **kwargs):
+    def __init__(self, port, **kwargs):
         print("Running fake smtp server on port 25")
-        super(FakeSMTPServer, self).__init__(('localhost', 2525), None, **kwargs)
+        super(FakeSMTPServer, self).__init__(('localhost', port), None, **kwargs)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     def process_message(*args, **kwargs):
         pass
 
 
 @contextlib.contextmanager
-def mockup_smtp_server():
-
-    server = FakeSMTPServer()
-
+def mockup_smtp_server(port):
+    server = FakeSMTPServer(port)
     smtp_thread = threading.Thread(daemon=True, target=asyncore.loop)
     smtp_thread.start()
-
     yield server
     server.close()
     smtp_thread.join(timeout=3)

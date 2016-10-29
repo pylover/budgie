@@ -1,7 +1,7 @@
 
 from budgie.observer import HelpdeskObserver
 from budgie.configuration import settings
-from budgie.tests.helpers import MockupSSHTestCase
+from budgie.tests.helpers import MockupSSHTestCase, mockup_smtp_server
 
 
 class UbserverTestCase(MockupSSHTestCase):
@@ -10,6 +10,14 @@ class UbserverTestCase(MockupSSHTestCase):
         super(UbserverTestCase, self).setUp()
         settings.merge("""
         workers: 2
+
+        smtp:
+          startls: false
+          auth: false
+          host: localhost
+          port: 2526
+          local_hostname: localhost
+
         clients:
           localhost:
             mail: admin@localhost.com
@@ -31,8 +39,9 @@ class UbserverTestCase(MockupSSHTestCase):
         ))
 
     def test_observer(self):
-        observer = HelpdeskObserver()
-        observer.start()
+        with mockup_smtp_server(2526):
+            observer = HelpdeskObserver()
+            observer.start()
 
 
 

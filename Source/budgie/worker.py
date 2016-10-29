@@ -132,6 +132,9 @@ class HelpDeskWorker(object):
             if current_value > alert.limit:
                 alerts.append('ALERT: %s, %s > %s' % (alert.type, current_value, alert.limit))
 
+        if self.error:
+            alerts.append(self.error)
+
         if alerts:
             with SMTPClient() as client:
                 client.send(
