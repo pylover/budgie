@@ -90,7 +90,9 @@ ENV/
 .idea
 Demo
 Source/development.yaml
-data
+/data
 practice/*.db
 
 /Source/budgie_agent.py
+/Source/sphinx/build/
+/Source/budgie/tests/data/*

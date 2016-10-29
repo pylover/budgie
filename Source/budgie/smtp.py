@@ -6,6 +6,10 @@ from budgie.configuration import settings
 
 
 class SMTPClient(object):
+    """
+    The SMTP client to send email when any incident is detected.
+
+    """
 
     def __init__(self, startls=False, auth=False):
         self.smtp_config = settings.smtp
@@ -29,7 +33,13 @@ class SMTPClient(object):
 
     def send(self, from_, to, subject, body, cc=None, bcc=None):
         """
-        Sending messages by email
+
+        :param from_: From address
+        :param to: Target address
+        :param subject: E-mail subject.
+        :param body: The email body in plain/unicode text.
+        :param cc:
+        :param bcc:
         """
 
         msg = MIMEText(body, 'html')

@@ -1,3 +1,23 @@
+"""
+The unique command line interface of this application.
+
+
+..  code-block:: bash
+
+    usage: budgie [-h] [-c CONFIG_FILE] [-V] {setup-db,run} ...
+
+    positional arguments:
+    {setup-db,run}        Available commands:
+
+    optional arguments:
+    -h, --help            show this help message and exit
+    -c CONFIG_FILE, --config-file CONFIG_FILE
+                        The server configuration file, default:
+                        development.yaml
+    -V, --version         Show the version.
+
+"""
+
 
 import sys
 import argparse

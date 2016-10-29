@@ -16,6 +16,7 @@ class HelpDeskWorker(object):
     result = None
     error = None
     sleep_time = 0.01
+    read_chunk_size = 1024
 
     def __init__(self, username, host, port=22, key_file=None, password=None, agent_script=None):
         """
@@ -70,6 +71,7 @@ class HelpDeskWorker(object):
         DBSession.commit()
 
     def store_and_execute_agent(self):
+
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
@@ -90,8 +92,10 @@ class HelpDeskWorker(object):
 
             # Putting the agent script on the target host.
             sftp_client = client.open_sftp()
-            sftp_client.put(self.agent_script, 'budgie_agent.py')
-            sftp_client.close()
+            try:
+                sftp_client.put(self.agent_script, 'budgie_agent.py')
+            finally:
+                sftp_client.close()
 
             # Making the target script executable
             client.exec_command('chmod +x budgie_agent.py')
@@ -104,13 +108,19 @@ class HelpDeskWorker(object):
             channel.exec_command('./budgie_agent.py')
 
             while True:  # monitoring process
+
                 # Reading from output streams
                 while channel.recv_ready():
-                    stdout += channel.recv(1000)
+                    stdout += channel.recv(self.read_chunk_size)
+
+                # Reading The std err if any.
                 while channel.recv_stderr_ready():
-                    stderr += channel.recv_stderr(1000)
-                if channel.exit_status_ready():  # If completed
+                    stderr += channel.recv_stderr(self.read_chunk_size)
+
+                # If completed
+                if channel.exit_status_ready():
                     break
+
                 time.sleep(self.sleep_time)
 
             exit_code = channel.recv_exit_status()
@@ -126,6 +136,13 @@ class HelpDeskWorker(object):
             client.close()
 
     def check_for_alerts(self, alerts_config, target):
+        """
+        Checking for reaching limitations and sending e-mail if any error or limitation reach is detected.
+
+        :param alerts_config: A list of alert config object.
+        :param target: Destination email address.
+
+        """
         alerts = []
         for alert in alerts_config:
             current_value = self.result[alert.type]

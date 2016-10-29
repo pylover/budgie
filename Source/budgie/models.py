@@ -1,3 +1,9 @@
+"""
+All database stuff will be done here.
+
+I use the code-first method, for using ORM's
+
+"""
 
 from datetime import datetime
 
@@ -17,6 +23,10 @@ engine = None
 
 
 class AgentLog(Base):
+    """
+    The only model of this applcation.
+    it holds the log of observation agent.
+    """
     __tablename__ = 'agent_log'
 
     id = Column(Integer, primary_key=True)
@@ -29,6 +39,10 @@ class AgentLog(Base):
 
 
 def init():
+    """
+    Initialize the mapper and binding configurations.
+
+    """
     global engine
     engine = create_engine(settings.db.uri, echo=settings.db.echo)
     metadata.bind = engine
@@ -36,8 +50,11 @@ def init():
 
 
 def create_database_objects(cli_arguments):
+    """
+    Generates the database objects.
+
+    """
     print('Creating Database schema')
     init()
     metadata.create_all(engine, checkfirst=True)
-
     print('done')

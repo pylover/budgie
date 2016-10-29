@@ -1,20 +1,30 @@
 # budgie
 A simple workstation observer across intranet.
 
-
+### Limitations
+ 
+- Only works with linux
+- Require Python3.5 or higher
+- Does not encrypting data from client script, because the data will be 
+  sent over the SSH
 
 ### Install
 
+```bash
     $ cd path/to/Source
     $ pip install -e .
+```
 
 ### Running tests
 
+```bash
     $ pip install -r requirements.test.txt
     $ nosetests
+```
 
-#### Command line interface
+### Command line interface
 
+```bash
     $ budgie -h
     
     usage: budgie [-h] [-c CONFIG_FILE] [-V] {setup-db,run} ...
@@ -32,11 +42,13 @@ A simple workstation observer across intranet.
 
     $ budgie -V
     0.1.0-dev.0
-    
+```
+
 ### Configuration:
 
 Create a file named 'development.yaml' on the current directory:
 
+```yaml
     workers: 2
 
     db:
@@ -69,6 +81,7 @@ Create a file named 'development.yaml' on the current directory:
           -
             type: cpu
             limit: 20
+```
 
 ### Setup database
 
@@ -81,6 +94,15 @@ config file to see what is happening.
 
     $ budgie run
     
-
     
+### Building documents
+
+    $ cd path/to/Source
+    $ pip install -r requirements.dev.txt
+    
+    $ cd path/to/Source/sphinx/source
+    $ sudo apt install texlive-latex-base texlive-latex-recommended \
+         texlive-latex-extra texlive-fonts-recommended
+    $ make latexpdf
+    $ make html
     

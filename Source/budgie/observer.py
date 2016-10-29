@@ -7,16 +7,22 @@ from budgie.worker import HelpDeskWorker
 
 
 class MaximumClientsReached(Exception):
+    """
+    Raised when maximum allowed clients to observation is reached.
+    """
     def __init__(self, maximum):
         super(MaximumClientsReached, self).__init__('Maximum allowed %d clients is reached.' % maximum)
 
 
-
 class HelpdeskObserver(object):
-    jobs = Queue(maxsize=1000)
+    """
+    The main object of the server.
+    I uses an event-pool to execute jobs concurrently.
 
-    def __init__(self):
+    """
 
+    def __init__(self, max_clients=1000):
+        self.jobs = Queue(maxsize=max_clients)
         # Stacking the jobs
         try:
             for k, v in settings.clients.items():
@@ -25,6 +31,10 @@ class HelpdeskObserver(object):
             raise MaximumClientsReached(1000)
 
     def start(self):
+        """
+        Starts the workers.
+
+        """
 
         # Creating a thread-pool concept
         threads = [
