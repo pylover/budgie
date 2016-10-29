@@ -16,19 +16,22 @@ metadata = Base.metadata
 engine = None
 
 
-class Workstation(Base):
-    __tablename__ = 'workstation'
+class AgentLog(Base):
+    __tablename__ = 'agent_log'
 
     id = Column(Integer, primary_key=True)
-    host_name = Column(Unicode(50), nullable=False)
+    hostname = Column(Unicode(50), nullable=False)
     entry_time = Column(DateTime, nullable=False, default=datetime.now())
+    end_time = Column(DateTime, nullable=True)
+    error = Column(Unicode(1024), nullable=True)
     memory = Column(Integer, nullable=True)
-    cpu_usages = Column(Integer)  # For now , just average of all available cores is stored.
+    cpu = Column(Integer)  # For now , just average of all available cores is stored.
 
 
 def init():
     global engine
     engine = create_engine(settings.db.uri, echo=settings.db.echo)
+    metadata.bind = engine
     DBSession.configure(bind=engine)
 
 

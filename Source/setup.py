@@ -12,7 +12,6 @@ dependencies = [
     'sqlalchemy',
     'pymlconf',
     'paramiko',
-
 ]
 
 

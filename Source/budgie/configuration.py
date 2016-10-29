@@ -11,6 +11,9 @@ db:
   uri: sqlite:///%(here)s/../data/devdata.db
   echo: true
 
+agent:
+  filename: %(here)s/client/budgie_agent.py
+
 clients:
   localhost:
     address: 127.0.0.1
@@ -33,8 +36,8 @@ clients:
 settings = pymlconf.DeferredConfigManager()
 
 
-def init(config_file=None):
-    settings.load(init_value=__builtin_configurations, files=config_file)
+def init(config_file=None, context=None):
+    settings.load(init_value=__builtin_configurations, files=config_file, context=context)
 
 
 
