@@ -1,4 +1,8 @@
 #! /usr/bin/env python3
+"""
+This script is only for unittests, And not to be used for production.
+
+"""
 
 import sys
 import io

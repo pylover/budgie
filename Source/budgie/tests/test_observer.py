@@ -9,7 +9,7 @@ class UbserverTestCase(MockupSSHTestCase):
     def setUp(self):
         super(UbserverTestCase, self).setUp()
         settings.merge("""
-        workers: 2
+        workers: 1
 
         smtp:
           startls: false

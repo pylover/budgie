@@ -8,9 +8,7 @@ BUDGIE_ROOT = abspath(dirname(__file__))
 
 __builtin_configurations = """
 
-workers: 10
-
-alert_target: admin@crossover.com
+workers: 1
 
 db:
   uri: sqlite:///%(here)s/../data/devdata.db

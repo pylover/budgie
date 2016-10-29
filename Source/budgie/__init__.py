@@ -3,7 +3,7 @@ import sys
 
 from . import cli
 from .configuration import settings, init as init_config
-from .observer import HelpdeskObserver
+from .observer import HelpdeskObserver, MaximumClientsReached
 from .models import init as init_models, metadata, engine
 
 __version__ = '0.1.0-dev.0'
@@ -11,8 +11,13 @@ __version__ = '0.1.0-dev.0'
 
 def start_server(cli_arguments):
     init_models()
-    observer = HelpdeskObserver()
-    observer.start()
+
+    try:
+        manager = HelpdeskObserver()
+        manager.start()
+    except MaximumClientsReached as ex:
+        print(ex, file=sys.stderr)
+
 
 def main():
     arguments = cli.init()

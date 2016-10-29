@@ -71,4 +71,4 @@ def mockup_smtp_server(port):
     smtp_thread.start()
     yield server
     server.close()
-    smtp_thread.join(timeout=3)
+    smtp_thread.join(timeout=1)

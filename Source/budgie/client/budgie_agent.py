@@ -53,10 +53,13 @@ def get_memory_usage():
 
 def main():
 
-    data = {
-        'cpu': get_cpu_usage(),
-        'memory': get_memory_usage()
-    }
+    try:
+        data = {
+            'cpu': get_cpu_usage(),
+            'memory': get_memory_usage()
+        }
+    except subprocess.SubprocessError as ex:
+        print(ex, file=sys.stderr)
 
     write_output(data)
     return 0
