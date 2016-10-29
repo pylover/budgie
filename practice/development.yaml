@@ -5,6 +5,7 @@ db:
 
 clients:
   localhost:
+    mail: vahid@dobisel.com
     hostname: localhost
     port: 22
     username: vahid
