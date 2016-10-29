@@ -49,6 +49,10 @@ def init():
     DBSession.configure(bind=engine)
 
 
+def check_db():
+    return engine.execute('SELECT 1')
+
+
 def create_database_objects(cli_arguments):
     """
     Generates the database objects.

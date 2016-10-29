@@ -20,7 +20,7 @@ __builtin_configurations = """
 workers: 1
 
 db:
-  uri: sqlite:///%(here)s/../data/devdata.db
+  uri: sqlite:///%(here)s/data/devdata.db
   echo: true
 
 agent:

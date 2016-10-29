@@ -11,13 +11,16 @@ A simple workstation observer across intranet.
 ### Install
 
 ```bash
+
     $ cd path/to/Source
-    $ pip install -e .
+    $ pip install [-e] .
 ```
 
 ### Running tests
 
 ```bash
+
+    $ cd path/to/Source
     $ pip install -r requirements.test.txt
     $ nosetests
 ```
@@ -25,6 +28,7 @@ A simple workstation observer across intranet.
 ### Command line interface
 
 ```bash
+
     $ budgie -h
     
     usage: budgie [-h] [-c CONFIG_FILE] [-V] {setup-db,run} ...
@@ -49,6 +53,7 @@ A simple workstation observer across intranet.
 Create a file named 'development.yaml' on the current directory:
 
 ```yaml
+
     workers: 2
 
     db:

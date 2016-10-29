@@ -91,7 +91,7 @@ ENV/
 Demo
 Source/development.yaml
 /data
-practice/*.db
+Source/practice/*.db
 
 /Source/budgie_agent.py
 /Source/sphinx/build/

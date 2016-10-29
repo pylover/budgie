@@ -9,6 +9,7 @@ import asyncore
 import contextlib
 import threading
 import mockssh
+import time
 
 from budgie.configuration import init as init_config, settings
 from budgie.models import init as init_models, metadata, engine
@@ -62,6 +63,7 @@ class MockupSSHTestCase(DatabaseTestCase):
         finally:
             self.mockup_server._socket = None
             self.mockup_server._thread = None
+            time.sleep(.2)
 
 
 class FakeSMTPServer(smtpd.SMTPServer):
@@ -86,4 +88,4 @@ def mockup_smtp_server(port):
     print('Shutting down mocked-up SMTP server.')
     server.close()
     print('Waiting for SMTP thread to stop.')
-    smtp_thread.join(timeout=1)
+    smtp_thread.join(timeout=.5)
