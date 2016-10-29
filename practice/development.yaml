@@ -1,0 +1,15 @@
+
+db:
+  uri: sqlite:///%(here)s/budgie.db
+  echo: false
+
+clients:
+  localhost:
+    hostname: localhost
+    port: 22
+    username: vahid
+    key_file: /home/vahid/.ssh/id_rsa
+    alerts:
+      cpu: 50
+      memory: 80
+

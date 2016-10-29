@@ -3,7 +3,7 @@ import sys
 import argparse
 
 
-DEFAULT_CONFIG_FILE='development.yaml'
+DEFAULT_CONFIG_FILE = 'development.yaml'
 DEFAULT_WORKERS = 10
 
 

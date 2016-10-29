@@ -88,10 +88,8 @@ ENV/
 # Rope project settings
 .ropeproject
 .idea
-
 Demo
-
 Source/development.yaml
-
 data
+practice/*.db
 

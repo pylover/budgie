@@ -10,8 +10,9 @@ __version__ = '0.1.0-dev.0'
 
 
 def start_server(cli_arguments):
-    print('START SERVER')
-
+    init_models()
+    observer = HelpdeskObserver()
+    observer.start()
 
 def main():
     arguments = cli.init()
@@ -21,7 +22,6 @@ def main():
 
     init_config(arguments.config_file if arguments.config_file else None)
 
-    print(arguments.func)
     if arguments.func is not None:
         arguments.func(arguments)
 

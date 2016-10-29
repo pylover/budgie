@@ -1,6 +1,9 @@
 
-
+from os.path import abspath, dirname
 import pymlconf
+
+
+BUDGIE_ROOT = abspath(dirname(__file__))
 
 
 __builtin_configurations = """
@@ -12,7 +15,7 @@ db:
   echo: true
 
 agent:
-  filename: %(here)s/client/budgie_agent.py
+  filename: %(root)s/client/budgie_agent.py
 
 clients:
 
@@ -26,7 +29,15 @@ settings = pymlconf.DeferredConfigManager()
 
 
 def init(config_file=None, context=None, **kw):
-    settings.load(init_value=__builtin_configurations, files=config_file, context=context, **kw)
+    _context = {
+        'root': BUDGIE_ROOT,
+        'here': abspath(dirname(config_file)) if config_file else BUDGIE_ROOT
+    }
+
+    if context:
+        _context.update(context)
+
+    settings.load(init_value=__builtin_configurations, files=config_file, context=_context, **kw)
 
 
 
