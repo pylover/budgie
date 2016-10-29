@@ -4,7 +4,6 @@ from datetime import datetime
 from os.path import exists
 import pickle
 import base64
-import threading
 
 import paramiko
 
@@ -12,7 +11,7 @@ from budgie.configuration import settings
 from budgie.models import AgentLog, DBSession
 
 
-class HelpDeskWorker(threading.Thread):
+class HelpDeskWorker(object):
     result = None
     error = None
     sleep_time = 0.01
@@ -34,8 +33,6 @@ class HelpDeskWorker(threading.Thread):
 
         """
         
-        super(HelpDeskWorker, self).__init__(daemon=True, name='%s@%s' % (username, host))
-
         # Checking the agent script
         agent_script = agent_script or settings.agent.filename
         if not exists(agent_script):
