@@ -1,9 +1,11 @@
 
+import sys
 from threading import Thread
 from queue import Queue, Empty as QueueEmpty, Full as QueueFull
 
 from budgie.configuration import settings
 from budgie.worker import HelpDeskWorker
+from budgie.smtp import SMTPConfigurationError
 
 
 class MaximumClientsReached(Exception):
@@ -22,7 +24,10 @@ class HelpdeskObserver(object):
     """
 
     def __init__(self, max_clients=1000):
+
+        # The ``Queue`` class  choosed because it's thread-safe
         self.jobs = Queue(maxsize=max_clients)
+
         # Stacking the jobs
         try:
             for k, v in settings.clients.items():
@@ -55,22 +60,24 @@ class HelpdeskObserver(object):
             thread.join()
 
     def worker(self):
-        while True:
-            try:
-                name, config = self.jobs.get(timeout=.1)
-            except QueueEmpty:
-                break
+        try:
+            while True:
+                try:
+                    name, config = self.jobs.get(timeout=.1)
+                except QueueEmpty:
+                    break
 
-            agent = HelpDeskWorker(
-                config.username,
-                config.hostname,
-                port=config.port,
-                key_file=config.key_file,
-                password=None if not hasattr(config, 'password') else config.password
-            )
+                agent = HelpDeskWorker(
+                    config.username,
+                    config.hostname,
+                    port=config.port,
+                    key_file=config.key_file,
+                    password=None if not hasattr(config, 'password') else config.password
+                )
 
-            agent.run()
+                agent.run()
 
-            # Check for alerts
-            agent.check_for_alerts(config.alerts, config.mail)
-
+                # Check for alerts
+                agent.check_for_alerts(config.alerts, config.mail)
+        except SMTPConfigurationError as ex:
+            print(ex, file=sys.stderr)

@@ -1,4 +1,5 @@
 
+import sys
 import time
 from datetime import datetime
 from os.path import exists
@@ -153,13 +154,16 @@ class HelpDeskWorker(object):
             alerts.append(self.error)
 
         if alerts:
-            with SMTPClient() as client:
-                client.send(
-                    from_="Budgie agent",
-                    to=target,
-                    subject='ALERT: %s' % self.host,
-                    body='\n'.join(alerts)
-                )
+            try:
+                with SMTPClient() as client:
+                    client.send(
+                        from_="Budgie agent",
+                        to=target,
+                        subject='ALERT: %s' % self.host,
+                        body='\n'.join(alerts)
+                    )
+            except ConnectionError as ex:
+                print("Cannot connect to SMTP server", file=sys.stderr)
 
 
 

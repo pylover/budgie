@@ -4,10 +4,10 @@ from budgie.configuration import settings
 from budgie.tests.helpers import MockupSSHTestCase, mockup_smtp_server
 
 
-class UbserverTestCase(MockupSSHTestCase):
+class ObserverTestCase(MockupSSHTestCase):
 
     def setUp(self):
-        super(UbserverTestCase, self).setUp()
+        super(ObserverTestCase, self).setUp()
         settings.merge("""
         workers: 1
 

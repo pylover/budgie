@@ -46,10 +46,22 @@ class MockupSSHTestCase(DatabaseTestCase):
         }
         self.key_file = join(TEST_STUFF_DIR, 'user1.key')
         self.mockup_server = mockssh.Server(self.ssh_users)
+        print('Starting mocked-up SSH server.')
         self.mockup_server.__enter__()
 
     def tearDown(self):
+        print('Shutting down mocked-up SSH server.')
         self.mockup_server.__exit__()
+        try:
+            self.mockup_server._socket.shutdown(socket.SHUT_RDWR)
+            self.mockup_server._socket.close()
+            print('Waiting for SSH thread to stop.')
+            self.mockup_server._thread.join()
+        except Exception:
+            pass
+        finally:
+            self.mockup_server._socket = None
+            self.mockup_server._thread = None
 
 
 class FakeSMTPServer(smtpd.SMTPServer):
@@ -68,7 +80,10 @@ class FakeSMTPServer(smtpd.SMTPServer):
 def mockup_smtp_server(port):
     server = FakeSMTPServer(port)
     smtp_thread = threading.Thread(daemon=True, target=asyncore.loop)
+    print('Starting mocked-up SMTP server.')
     smtp_thread.start()
     yield server
+    print('Shutting down mocked-up SMTP server.')
     server.close()
+    print('Waiting for SMTP thread to stop.')
     smtp_thread.join(timeout=1)

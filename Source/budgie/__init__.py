@@ -5,6 +5,8 @@ from . import cli
 from .configuration import settings, init as init_config
 from .observer import HelpdeskObserver, MaximumClientsReached
 from .models import init as init_models, metadata, engine
+from .smtp import SMTPConfigurationError
+
 
 __version__ = '0.1.0-dev.0'
 
@@ -15,7 +17,9 @@ def start_server(cli_arguments):
     try:
         manager = HelpdeskObserver()
         manager.start()
-    except MaximumClientsReached as ex:
+    except (
+            MaximumClientsReached,
+            SMTPConfigurationError) as ex:
         print(ex, file=sys.stderr)
 
 

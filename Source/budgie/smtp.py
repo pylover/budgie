@@ -5,6 +5,10 @@ from email.mime.text import MIMEText
 from budgie.configuration import settings
 
 
+class SMTPConfigurationError(Exception):
+    pass
+
+
 class SMTPClient(object):
     """
     The SMTP client to send email when any incident is detected.
@@ -27,6 +31,9 @@ class SMTPClient(object):
             self.smtp_server.starttls()
 
         if self.auth:
+            if not (self.smtp_config.get('username') and self.smtp_config.get('password')):
+                raise SMTPConfigurationError('Please provide a `smpt.username` and `smtp.password` in config file.')
+
             self.smtp_server.login(self.smtp_config.username, self.smtp_config.password)
 
         return self

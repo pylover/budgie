@@ -1,7 +1,15 @@
 
 db:
   uri: sqlite:///%(here)s/budgie.db
-  echo: true
+  echo: false
+
+smtp:
+  host: smtp.gmail.com
+  port: 587
+  startls: True
+  auth: True
+  username: vahid.mardani@gmail.com
+  password: password
 
 clients:
   localhost:
@@ -11,6 +19,11 @@ clients:
     username: vahid
     key_file: /home/vahid/.ssh/id_rsa
     alerts:
-      cpu: 50
-      memory: 80
+      -
+        type: cpu
+        limit: 20
+
+      -
+        type: memory
+        limit: 20
 
