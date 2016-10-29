@@ -12,6 +12,7 @@ class UbserverTestCase(MockupSSHTestCase):
         workers: 2
         clients:
           localhost:
+            mail: admin@localhost.com
             hostname: %s
             port: %s
             username: 'user1'

@@ -10,6 +10,8 @@ __builtin_configurations = """
 
 workers: 10
 
+alert_target: admin@crossover.com
+
 db:
   uri: sqlite:///%(here)s/../data/devdata.db
   echo: true
@@ -18,6 +20,8 @@ agent:
   filename: %(root)s/client/budgie_agent.py
 
 smtp:
+    startls: False
+    auth: False
     host: localhost
     port: 25
     local_hostname: localhost

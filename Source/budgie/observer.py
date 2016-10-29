@@ -15,13 +15,18 @@ def worker(jobs_stack):
         except QueueEmpty:
             break
 
-        HelpDeskWorker(
+        agent = HelpDeskWorker(
             config.username,
             config.hostname,
             port=config.port,
             key_file=config.key_file,
             password=None if not hasattr(config, 'password') else config.password
-        ).run()
+        )
+
+        agent.run()
+
+        # Check for alert
+        agent.check_for_alerts(config.alerts, config.mail)
 
 
 class HelpdeskObserver(object):
@@ -37,7 +42,11 @@ class HelpdeskObserver(object):
 
         # Creating a thread-pool concept
         threads = [
-            Thread(name='Worker: %s' % i, target=functools.partial(worker, self.jobs))
+            Thread(
+                name='Worker: %s' % i,
+                daemon=True,
+                target=functools.partial(worker, self.jobs)
+            )
             for i in range(settings.workers)
         ]
 

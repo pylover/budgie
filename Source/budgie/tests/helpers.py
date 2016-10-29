@@ -67,7 +67,7 @@ def mockup_smtp_server():
 
     server = FakeSMTPServer()
 
-    smtp_thread = threading.Thread(target=asyncore.loop)
+    smtp_thread = threading.Thread(daemon=True, target=asyncore.loop)
     smtp_thread.start()
 
     yield server

@@ -10,7 +10,7 @@ from budgie.configuration import init as init_config, settings
 class SMTPClientTestCase(unittest.TestCase):
 
     def setUp(self):
-        init_config()
+        init_config(force=True)
         settings.merge("""
         smtp:
           host: localhost

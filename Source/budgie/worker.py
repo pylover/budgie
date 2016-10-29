@@ -9,6 +9,7 @@ import paramiko
 
 from budgie.configuration import settings
 from budgie.models import AgentLog, DBSession
+from budgie.smtp import SMTPClient
 
 
 class HelpDeskWorker(object):
@@ -55,7 +56,7 @@ class HelpDeskWorker(object):
         )
 
         try:
-            self.store_and_execute_aget()
+            self.store_and_execute_agent()
 
             if self.error is not None:
                 new_log.error = self.error
@@ -68,7 +69,7 @@ class HelpDeskWorker(object):
         DBSession.add(new_log)
         DBSession.commit()
 
-    def store_and_execute_aget(self):
+    def store_and_execute_agent(self):
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
@@ -123,6 +124,22 @@ class HelpDeskWorker(object):
 
         finally:
             client.close()
+
+    def check_for_alerts(self, alerts_config, target):
+        alerts = []
+        for alert in alerts_config:
+            current_value = self.result[alert.type]
+            if current_value > alert.limit:
+                alerts.append('ALERT: %s, %s > %s' % (alert.type, current_value, alert.limit))
+
+        if alerts:
+            with SMTPClient() as client:
+                client.send(
+                    from_="Budgie agent",
+                    to=target,
+                    subject='ALERT: %s' % self.host,
+                    body='\n'.join(alerts)
+                )
 
 
 
