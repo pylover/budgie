@@ -3,7 +3,10 @@
 from os.path import abspath, dirname, join, exists
 import os
 import unittest
-
+import smtpd
+import asyncore
+import contextlib
+import threading
 import mockssh
 
 from budgie.configuration import init as init_config, settings
@@ -46,3 +49,27 @@ class MockupSSHTestCase(DatabaseTestCase):
 
     def tearDown(self):
         self.mockup_server.__exit__()
+
+
+class FakeSMTPServer(smtpd.SMTPServer):
+    """A Fake smtp server"""
+
+    def __init__(self, **kwargs):
+        print("Running fake smtp server on port 25")
+        super(FakeSMTPServer, self).__init__(('localhost', 2525), None, **kwargs)
+
+    def process_message(*args, **kwargs):
+        pass
+
+
+@contextlib.contextmanager
+def mockup_smtp_server():
+
+    server = FakeSMTPServer()
+
+    smtp_thread = threading.Thread(target=asyncore.loop)
+    smtp_thread.start()
+
+    yield server
+    server.close()
+    smtp_thread.join(timeout=3)

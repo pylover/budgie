@@ -17,6 +17,13 @@ db:
 agent:
   filename: %(root)s/client/budgie_agent.py
 
+smtp:
+    host: localhost
+    port: 25
+    local_hostname: localhost
+    username:
+    password:
+
 clients:
 
 

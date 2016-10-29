@@ -1,7 +1,7 @@
 
 db:
   uri: sqlite:///%(here)s/budgie.db
-  echo: false
+  echo: true
 
 clients:
   localhost:
