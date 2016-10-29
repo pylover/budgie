@@ -24,6 +24,9 @@ class DatabaseTestCase(unittest.TestCase):
         settings.merge("""
         db:
           uri: sqlite:///%(db_file)s
+
+        agent:
+          filename: %(here)s/client/budgie_agent.py
         """)
 
         init_models()
