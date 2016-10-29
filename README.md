@@ -66,6 +66,8 @@ Create a file named 'development.yaml' on the current directory:
       host: localhost
       port: 2526
       local_hostname: localhost
+      username: <smtp username>
+      password: <smtp password>
 
     clients:
       localhost:
